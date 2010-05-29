@@ -1,0 +1,16 @@
+name: Blog
+identifier: Blog
+component: com_blog
+version: 1.0.0
+date: May 2010
+author:
+    name: JetWorks
+    email: dirceu@jetworks.com.br
+    url: http://jetworks.com.br
+copyright: 2010 JetWorks. All rights reserved.
+license: GNU General Public License
+description: Component description
+default_language: en-GB
+database:
+    engine: MyISAM
+    default_charset: utf8

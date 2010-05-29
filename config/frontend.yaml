@@ -1,0 +1,4 @@
+posts:
+    details: title content author_name
+    new: title alias content author_name
+    list: title author_name

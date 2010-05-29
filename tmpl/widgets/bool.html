@@ -1,0 +1,12 @@
+        	<tr>
+        		<td width="100" align="right" class="key"><label for="{{key}}"> <?php echo JText::_('{{description}}'); ?>:</label></td>
+        		<td>
+        		  <?php
+        		  foreach (array(JText::_("No"), JText::_("Yes")) as $key => $value) {
+        		      $c = '';
+        		      if($this->item->{{key}} == $key) $c = " checked='checked' ";
+        		      echo "<input type='radio' name='{{key}}' id='{{key}}_$key' $c value='$key' /> <label for='{{key}}_$key'>$value</label><br />";
+        		  }
+        		  ?>
+        		</td>
+        	</tr>

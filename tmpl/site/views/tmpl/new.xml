@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+  <layout title="New Layout">
+    <message>
+      New Layout
+    </message>
+  </layout>
+  <state>
+    <name>New Layout</name>
+    <description>This New Layout displays a form to submit new {{entity}}.</description>
+  </state>
+</metadata>

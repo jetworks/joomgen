@@ -1,0 +1,14 @@
+posts:
+    title: string
+    alias:
+        type: string
+        required: false
+    content: rich_text
+    author_name:
+        type: string
+        description: Author
+    created_on: datetime
+    published: bool
+
+categories:
+    title: string

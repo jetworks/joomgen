@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+  <layout title="Default Layout">
+    <message>
+      Default Layout
+    </message>
+  </layout>
+  <state>
+    <name>Default Layout</name>
+    <description>This Default Layout displays the default list of all current {{entity}}.</description>
+  </state>
+</metadata>
