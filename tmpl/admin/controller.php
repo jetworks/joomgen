@@ -37,75 +37,75 @@ class {{identifier}}Controller{{controller}} extends {{identifier}}Controller
      * @access public
      * @since  1.0
      */
-	public function __construct()
-	{
-		parent::__construct();
-		$this->registerTask('add', 'edit');
-		{{register_publish}}
-	}
+    public function __construct()
+    {
+        parent::__construct();
+        $this->registerTask('add', 'edit');
+        {{register_publish}}
+    }
 
     /**
-	 * Method to edit an object
-	 *
+     * Method to edit an object
+     *
      * @return void
-	 * @access public
+     * @access public
      * @since  1.0
-	 */
-	public function edit()
-	{
-		JRequest::setVar('view', '{{controller}}');
-		JRequest::setVar('hidemainmenu', 1);
-		parent::display();
-	}
+     */
+    public function edit()
+    {
+        JRequest::setVar('view', '{{controller}}');
+        JRequest::setVar('hidemainmenu', 1);
+        parent::display();
+    }
 
     /**
-	 * Method to save an object
-	 *
+     * Method to save an object
+     *
      * @return void
-	 * @access public
+     * @access public
      * @since  1.0
-	 */
-	public function save()
-	{
-		$model = $this->getModel('{{controller}}');
-		if ($model->save()) {
-			$msg = JText::_('Object saved successfully!');
-		} else {
-		    $msg = JText::_('Error: '.$model->getError());
-		}
-		$this->setRedirect(JRoute::_('index.php?option={{component}}&amp;view={{controller}}&amp;layout=list'), $msg);
-	}
+     */
+    public function save()
+    {
+        $model = $this->getModel('{{controller}}');
+        if ($model->save()) {
+            $msg = JText::_('Object saved successfully!');
+        } else {
+            $msg = JText::_('Error: '.$model->getError());
+        }
+        $this->setRedirect(JRoute::_('index.php?option={{component}}&amp;view={{controller}}&amp;layout=list'), $msg);
+    }
 
     /**
-	 * Method to remove an object
-	 *
+     * Method to remove an object
+     *
      * @return void
-	 * @access public
+     * @access public
      * @since  1.0
-	 */
-	public function remove()
-	{
-		$model = $this->getModel('{{controller}}');
-		if(!$model->delete()) {
-			$msg = JText::_('Error: couldn\'t delete one or more objects');
-		} else {
-			$msg = JText::_('Successfully deleted objects!');
-		}
-		$this->setRedirect(JRoute::_('index.php?option={{component}}&amp;view={{controller}}&amp;layout=list'), $msg);
-	}
+     */
+    public function remove()
+    {
+        $model = $this->getModel('{{controller}}');
+        if(!$model->delete()) {
+            $msg = JText::_('Error: couldn\'t delete one or more objects');
+        } else {
+            $msg = JText::_('Successfully deleted objects!');
+        }
+        $this->setRedirect(JRoute::_('index.php?option={{component}}&amp;view={{controller}}&amp;layout=list'), $msg);
+    }
 
     /**
-	 * Method to cancel an operation
-	 *
+     * Method to cancel an operation
+     *
      * @return void
-	 * @access public
+     * @access public
      * @since  1.0
-	 */
-	public function cancel()
-	{
-		$msg = JText::_('Operation Aborted');
-		$this->setRedirect(JRoute::_('index.php?option={{component}}&amp;view={{controller}}&amp;layout=list'), $msg);
-	}
-	
+     */
+    public function cancel()
+    {
+        $msg = JText::_('Operation Aborted');
+        $this->setRedirect(JRoute::_('index.php?option={{component}}&amp;view={{controller}}&amp;layout=list'), $msg);
+    }
+
 {{publish_function}}
 }

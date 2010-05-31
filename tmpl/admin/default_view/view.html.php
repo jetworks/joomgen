@@ -37,11 +37,11 @@ class {{identifier}}View{{identifier}} extends JView
      * @access public
      * @since  1.0
      */
-	function display($tpl = null)
-	{
+    function display($tpl = null)
+    {
         // Set toolbar items
         JToolBarHelper::title(JText::_('{{identifier}}'), 'generic.png');
 
-		parent::display($tpl);
-	}
+        parent::display($tpl);
+    }
 }

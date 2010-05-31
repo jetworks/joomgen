@@ -37,29 +37,29 @@ class {{identifier}}Controller{{controller}} extends {{identifier}}Controller
      * @access public
      * @since  1.0
      */
-	public function __construct()
-	{
-		parent::__construct();
-	}
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
     /**
-	 * Method to save an object
-	 *
+     * Method to save an object
+     *
      * @return void
-	 * @access public
+     * @access public
      * @since  1.0
-	 */
-	public function save()
-	{
+     */
+    public function save()
+    {
         JRequest::checkToken() or jexit('Invalid Token');
-		$model = $this->getModel('{{controller}}');
-		if ($model->save()) {
-			$msg = JText::_('Object created successfully!');
+        $model = $this->getModel('{{controller}}');
+        if ($model->save()) {
+            $msg = JText::_('Object created successfully!');
             $url = 'index.php?option={{component}}&amp;view={{controller}}&amp;layout=list';
-		} else {
-		    $msg = JText::_('Error while created object: '.$model->getError());
+        } else {
+            $msg = JText::_('Error while created object: '.$model->getError());
             $url = 'index.php?option={{component}}&amp;view={{controller}}&amp;layout=new';
-		}
-		$this->setRedirect(JRoute::_($url), $msg);
-	}
+        }
+        $this->setRedirect(JRoute::_($url), $msg);
+    }
 }

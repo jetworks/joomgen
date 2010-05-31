@@ -37,8 +37,8 @@ class {{identifier}}View{{identifier}} extends JView
      * @access public
      * @since  1.0
      */
-	function display($tpl = null)
-	{
-		parent::display($tpl);
-	}
+    function display($tpl = null)
+    {
+        parent::display($tpl);
+    }
 }

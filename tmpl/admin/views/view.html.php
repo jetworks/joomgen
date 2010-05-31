@@ -37,24 +37,24 @@ class {{identifier}}View{{viewClass}} extends JView
      * @access public
      * @since  1.0
      */
-	function display($tpl = null)
-	{
+    function display($tpl = null)
+    {
         // Set toolbar items
         JToolBarHelper::title(JText::_('Manage {{viewClass}}'), 'generic.png');
-		
-		// Handle different data for different layouts
+
+        // Handle different data for different layouts
         $layout = JRequest::getVar('layout');
         if($layout == "list") {
             JToolBarHelper::deleteList();
-    		JToolBarHelper::editListX();
-    		JToolBarHelper::addNewX();
+            JToolBarHelper::editListX();
+            JToolBarHelper::addNewX();
             $this->assignRef('items', $this->get('Items'));
         } else {
             $this->assignRef('item', $this->get('Item'));
             JToolBarHelper::save();
-   			JToolBarHelper::cancel();
+            JToolBarHelper::cancel();
         }
-        
-		parent::display($tpl);
-	}
+
+        parent::display($tpl);
+    }
 }

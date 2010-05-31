@@ -30,15 +30,15 @@ jimport('joomla.application.component.controller');
  */
 class {{identifier}}Controller extends JController
 {
-	/**
-	 * Method to show administrator
-	 *
-	 * @return void
-	 * @access public
-	 * @since  1.0
-	 */
-	public function display()
-	{
-		parent::display();
-	}
+    /**
+     * Method to show administrator
+     *
+     * @return void
+     * @access public
+     * @since  1.0
+     */
+    public function display()
+    {
+        parent::display();
+    }
 }

@@ -27,8 +27,8 @@ JHTML::_('behavior.keepalive');
 </table>
     <?php echo JHTML::_('form.token'); ?>
     <input type="submit" value="<?php echo JText::_('Submit'); ?>" />
-    <input type="hidden" name="option" value="{{component}}" /> 
-    <input type="hidden" name="task" value="save" /> 
-    <input type="hidden" name="view" value="{{view}}" /> 
+    <input type="hidden" name="option" value="{{component}}" />
+    <input type="hidden" name="task" value="save" />
+    <input type="hidden" name="view" value="{{view}}" />
     <input type="hidden" name="controller" value="{{view}}" />
 </form>

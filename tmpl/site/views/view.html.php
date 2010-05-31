@@ -37,16 +37,16 @@ class {{identifier}}View{{viewClass}} extends JView
      * @access public
      * @since  1.0
      */
-	function display($tpl = null)
-	{
-		// Handle different data for different layouts
+    function display($tpl = null)
+    {
+        // Handle different data for different layouts
         $layout = JRequest::getVar('layout');
         if($layout == "list") {
             $this->assignRef('items', $this->get('Items'));
         } else {
             $this->assignRef('item', $this->get('Item'));
         }
-        
-		parent::display($tpl);
-	}
+
+        parent::display($tpl);
+    }
 }

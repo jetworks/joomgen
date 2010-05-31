@@ -42,22 +42,22 @@ class {{identifier}}Model{{model}} extends JModel
         parent::__construct();
     }
 
-	/**
-	 * Method to get data
-	 *
+    /**
+     * Method to get data
+     *
      * @return object Items data
-	 * @access public
+     * @access public
      * @since  1.0
-	 */
+     */
     public function getItems()
     {
-		if (empty($this->_items)) {
-			// Load the items
-			$this->_loadItems();
-		}
-		return $this->_items;
+        if (empty($this->_items)) {
+            // Load the items
+            $this->_loadItems();
+        }
+        return $this->_items;
     }
-    
+
     /**
      * Method to load data from a specific item
      *
@@ -75,7 +75,7 @@ class {{identifier}}Model{{model}} extends JModel
         $this->_db->setQuery("SELECT * FROM `{{table_name}}` WHERE `id` = $id{{single_publish}}");
         return $this->_db->loadObject();
     }
-    
+
     /**
      * Method to save an object
      *
@@ -84,27 +84,27 @@ class {{identifier}}Model{{model}} extends JModel
      * @since  1.0
      */
     public function save()
-	{
-		$row =& $this->getTable('{{model}}', 'JTable');
-		$data = JRequest::get('post');
+    {
+        $row =& $this->getTable('{{model}}', 'JTable');
+        $data = JRequest::get('post');
 {{rich_text_fields}}
-		if (!$row->bind($data)) {
-			$this->setError($this->_db->getErrorMsg());
-    		return false;
-		}
+        if (!$row->bind($data)) {
+            $this->setError($this->_db->getErrorMsg());
+            return false;
+        }
 
-		if (!$row->check()) {
-			$this->setError($row->getError());
-			return false;
-		}
+        if (!$row->check()) {
+            $this->setError($row->getError());
+            return false;
+        }
 
-		if (!$row->store()) {
-			$this->setError($this->_db->getErrorMsg());
-			return false;
-		}
+        if (!$row->store()) {
+            $this->setError($this->_db->getErrorMsg());
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
     /**
      * Method to load data

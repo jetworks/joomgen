@@ -1,6 +1,6 @@
 <?php
 /**
- * Main JoomGen file: a collection of methods used for 
+ * Main JoomGen file: a collection of methods used for
  * generating Joomla! code
  *
  * PHP versions 5
@@ -77,19 +77,19 @@ function prepare_config()
             $config[$key] = $value;
         }
     }
-    
+
     // special variables
     $config['entry_point'] = strtolower($config['identifier']).'.php';
     $config['submenu'] = '';
 
     // raise error if it doesn't find the expected keys
-    $expected_keys = array('name', 'identifier', 'component', 'database_engine', 
+    $expected_keys = array('name', 'identifier', 'component', 'database_engine',
                            'database_default_charset', 'default_language',
                            'entry_point', 'submenu');
     if($not_found = array_diff_key(array_flip($expected_keys), $config)) {
         throw new Exception('You need to provide the following keys on component.yaml: '.implode(', ', array_keys($not_found)));
     }
-    
+
     return $config;
 }
 
@@ -110,11 +110,11 @@ function prepare_models()
             if (!is_array($value)) {
                 $value = array('type' => $value);
             }
-            
+
             // set defaults
             $defaults = array('required' => true, 'description' => title($key));
             $value = array_merge($defaults, $value);
-            
+
             $models[$model][$key] = $value;
         }
     }
@@ -138,7 +138,7 @@ function prepare_frontend()
         foreach ($views as $view => $fields) {
             $frontend[$model][$view] = explode(' ', $fields);
         }
-    }    
+    }
     return $frontend;
 }
 
@@ -147,13 +147,13 @@ function prepare_frontend()
  * of {{key}} with $data[$key].
  *
  * @param string $template Template to be proccessed
- * @param array  $data     Data needed by the template 
+ * @param array  $data     Data needed by the template
  *
  * @return string
  * @access public
  * @since  2.0
  */
-function render($template, $data) 
+function render($template, $data)
 {
     $re = "\\{\\{(\w+)\\}\\}";
     preg_match_all("/$re/is", $template, $matches);
@@ -167,7 +167,7 @@ function render($template, $data)
 
 /**
  * Generates directory structure for the whole component, a manifest.xml file,
- * controllers and entry points for the frontend and the backend. 
+ * controllers and entry points for the frontend and the backend.
  *
  * @return void
  * @access public
@@ -179,11 +179,11 @@ function generate_output($config, $models, $frontend)
     $base_path = $component.DS;
     $lang_path = 'language'.DS.$config['default_language'];
     $lang_file = DS.$config['default_language'].'.'.$config['component'].'.ini';
-    
+
     // create fresh output directory
     @delete_dir($component);
     mkdir($component);
-    
+
     // generate directory structure for the backend
     mkdir($base_path.'admin');
     $admin_path = $base_path.'admin'.DS;
@@ -191,10 +191,10 @@ function generate_output($config, $models, $frontend)
         mkdir($admin_path.$dir);
         file_put_contents($admin_path.$dir.DS.'index.html', 'test');
     }
-    
+
     // generate config.xml file
     file_put_contents($admin_path.DS.'config.xml', file_get_contents('tmpl'.DS.'admin'.DS.'config.xml'));
-    
+
     // generate SQL install / uninstall files
     if($models) {
         $sql = prepare_sql($config, $models);
@@ -203,7 +203,7 @@ function generate_output($config, $models, $frontend)
     }
     file_put_contents($admin_path.'install'.DS.'installsql.mysql.utf8.php', $sql[0]);
     file_put_contents($admin_path.'install'.DS.'uninstallsql.mysql.utf8.php', $sql[1]);
-    
+
     // generate tables, models, controllers and views for the backend
     if($models) {
         foreach (prepare_tables($config, $models) as $name => $content) {
@@ -238,10 +238,10 @@ function generate_output($config, $models, $frontend)
         $submenu .= "    </submenu>\n";
         $config['submenu'] = $submenu;
     }
-    
+
     // generate empty language file for the backend
     file_put_contents($admin_path.$lang_path.$lang_file, '');
-    
+
     // generate directory structure for the frontend
     mkdir($base_path.'site');
     $site_path = $base_path.'site'.DS;
@@ -249,7 +249,7 @@ function generate_output($config, $models, $frontend)
         mkdir($site_path.$dir);
         file_put_contents($site_path.$dir.DS.'index.html', 'test');
     }
-    
+
     // generate models, controllers and views for the frontend
     if($models) {
         foreach (prepare_models_or_controllers($config, $models, $frontend, 'model', 'site') as $name => $content) {
@@ -274,27 +274,27 @@ function generate_output($config, $models, $frontend)
             }
         }
     }
-    
+
     // generate empty language file for the frontend
     file_put_contents($site_path.$lang_path.$lang_file, '');
-    
+
     // generate manifest file
     $template = file_get_contents('tmpl'.DS.'manifest.xml');
     file_put_contents($base_path.'manifest.xml', render($template, $config));
-    
+
     // generate controllers
     $template = file_get_contents('tmpl'.DS.'controller.php');
     $rendered_template = render($template, $config);
     foreach (array($admin_path, $site_path) as $path) {
         file_put_contents($path.'controller.php', $rendered_template);
     }
-    
+
     // generate entry points
     $template = file_get_contents('tmpl'.DS.'entry_point.php');
 
     $config['include_tables'] = "JTable::addIncludePath(JPATH_COMPONENT.DS.'tables');\n\n";
     file_put_contents($admin_path.$config['entry_point'], render($template, $config));
-    
+
     $config['include_tables'] = '';
     file_put_contents($site_path.$config['entry_point'], render($template, $config));
 
@@ -330,7 +330,7 @@ function prepare_sql($config, $models)
     $table_prefix = '#__'.str_replace('com_', '', $config['component']).'_';
     $install_file = '';
     $uninstall_file = '';
-    
+
     foreach ($models as $model => $attrs) {
         $uninstall_file .= "DROP TABLE IF EXISTS `$table_prefix$model`;\n";
         $install_file .= "CREATE TABLE IF NOT EXISTS `$table_prefix$model` (\n";
@@ -343,7 +343,7 @@ function prepare_sql($config, $models)
         $install_file .= ") ENGINE=".$config['database_engine'].
                          " DEFAULT CHARSET=".$config['database_default_charset'].";\n\n";
     }
-    
+
     return array($install_file, $uninstall_file);
 }
 
@@ -369,7 +369,7 @@ function prepare_tables($config, $models)
     $table_prefix = '#__'.str_replace('com_', '', $config['component']).'_';
     $template = file_get_contents('tmpl'.DS.'admin'.DS.'table.php');
     $files = array();
-    
+
     foreach ($models as $model => $attrs) {
         if($attrs['sql_only']) continue;
         $config['model'] = ucfirst($model);
@@ -384,7 +384,7 @@ function prepare_tables($config, $models)
         }
         $config['required_fields'] = implode(', ', $required_fields);
         $config['properties'] = $properties;
-        
+
         $files["$model.php"] = render($template, $config);
     }
 
@@ -403,7 +403,7 @@ function prepare_models_or_controllers($config, $models, $views, $type='model', 
     $table_prefix = '#__'.str_replace('com_', '', $config['component']).'_';
     $template = file_get_contents('tmpl'.DS.$for.DS.$type.'.php');
     $files = array();
-    
+
     foreach ($models as $model => $attrs) {
         if($attrs['sql_only']) continue;
         $config[$type] = ucfirst($model);
@@ -443,46 +443,46 @@ function prepare_views_for_backend($config, $models)
     $list_template = file_get_contents($views_path.'tmpl'.DS.'list.php');
     $default_template = file_get_contents($views_path.'tmpl'.DS.'default.php');
     $files = array();
-    
+
     // mapping of widgets / input types
     $widgets_path = 'tmpl'.DS.'widgets'.DS;
-    $widget_types = array('string' => file_get_contents($widgets_path.'string.html'), 
-                          'text' => file_get_contents($widgets_path.'text.html'), 
-                          'rich_text' => file_get_contents($widgets_path.'rich_text.html'), 
-                          'int' => file_get_contents($widgets_path.'string.html'), 
-                          'double' => file_get_contents($widgets_path.'string.html'), 
-                          'decimal' => file_get_contents($widgets_path.'string.html'), 
-                          'date' => file_get_contents($widgets_path.'datetime.html'), 
-                          'time' => file_get_contents($widgets_path.'datetime.html'), 
+    $widget_types = array('string' => file_get_contents($widgets_path.'string.html'),
+                          'text' => file_get_contents($widgets_path.'text.html'),
+                          'rich_text' => file_get_contents($widgets_path.'rich_text.html'),
+                          'int' => file_get_contents($widgets_path.'string.html'),
+                          'double' => file_get_contents($widgets_path.'string.html'),
+                          'decimal' => file_get_contents($widgets_path.'string.html'),
+                          'date' => file_get_contents($widgets_path.'datetime.html'),
+                          'time' => file_get_contents($widgets_path.'datetime.html'),
                           'datetime' => file_get_contents($widgets_path.'datetime.html'),
                           'bool' => file_get_contents($widgets_path.'bool.html'));
-    
+
     // different date formats for the date/time fields
     $date_formats = array('datetime' => '%Y-%m-%d %H:%M:00',
                           'date' => '%Y-%m-%d',
                           'time' => '%H:%M:00');
-    
+
     // rich text editor boilerplate code
     $rte  = "\$editor =& JFactory::getEditor();\n";
     $rte .= "\$params = array('smilies'=> '0', 'html' => '1', 'style'  => '1', 'layer'  => '0', 'table'  => '1', 'clear_entities'=>'0');";
-    
+
     // behavior required for showing the calendar
     $cal = "JHTML::_('behavior.calendar');\n";
-    
+
     foreach ($models as $model => $attrs) {
         // by default, we don't need it
         $config['rte'] = $config['cal'] = '';
         if($attrs['sql_only']) continue;
         $config['viewClass'] = ucfirst($model);
         $config['view'] = $model;
-        
+
         $config['fields_headers'] = $config['fields_values'] = $config['widgets'] = '';
         foreach ($attrs as $key => $value) {
-            $config['fields_headers'] .= "       			<th><?php echo JText::_('".$value['description']."'); ?></th>\n";
+            $config['fields_headers'] .= "                  <th><?php echo JText::_('".$value['description']."'); ?></th>\n";
             if($key == 'published') {
-                $config['fields_values'] .= "               		<td><?php echo JHTML::_('grid.published', \$row, \$i); ?></td>\n";
+                $config['fields_values'] .= "                       <td><?php echo JHTML::_('grid.published', \$row, \$i); ?></td>\n";
             } else {
-                $config['fields_values'] .= "               		<td><?php echo \"<a href='\$link'>\".\$row->$key.\"</a>\"; ?></td>\n";
+                $config['fields_values'] .= "                       <td><?php echo \"<a href='\$link'>\".\$row->$key.\"</a>\"; ?></td>\n";
             }
             $widget_config = array('key'=>$key, 'description'=>$value['description']);
             if(in_array($value['type'], array('date', 'time', 'datetime'))) {
@@ -490,17 +490,17 @@ function prepare_views_for_backend($config, $models)
                 $config['cal'] = $cal;
             }
             $config['widgets'] .= render($widget_types[$value['type']], $widget_config);
-            
+
             if($value['type'] == 'rich_text') {
                 $config['rte'] = $rte;
             }
         }
 
-        $files[$model] = array('view.html.php' => render($class_template, $config), 
-                               'tmpl'.DS.'list.php' => render($list_template, $config), 
+        $files[$model] = array('view.html.php' => render($class_template, $config),
+                               'tmpl'.DS.'list.php' => render($list_template, $config),
                                'tmpl'.DS.'default.php' => render($default_template, $config));
     }
-    
+
     return $files;
 }
 
@@ -522,47 +522,47 @@ function prepare_views_for_frontend($config, $models, $views)
     $new_template = file_get_contents($views_path.'tmpl'.DS.'new.php');
     $new_params = file_get_contents($views_path.'tmpl'.DS.'new.xml');
     $table_prefix = '#__'.str_replace('com_', '', $config['component']).'_';
-    
+
     $files = array();
-    
+
     // mapping of widgets / input types
     $widgets_path = 'tmpl'.DS.'widgets'.DS;
-    $widget_types = array('string' => file_get_contents($widgets_path.'string.html'), 
-                          'text' => file_get_contents($widgets_path.'text.html'), 
-                          'rich_text' => file_get_contents($widgets_path.'rich_text.html'), 
-                          'int' => file_get_contents($widgets_path.'string.html'), 
-                          'double' => file_get_contents($widgets_path.'string.html'), 
-                          'decimal' => file_get_contents($widgets_path.'string.html'), 
-                          'date' => file_get_contents($widgets_path.'datetime.html'), 
-                          'time' => file_get_contents($widgets_path.'datetime.html'), 
+    $widget_types = array('string' => file_get_contents($widgets_path.'string.html'),
+                          'text' => file_get_contents($widgets_path.'text.html'),
+                          'rich_text' => file_get_contents($widgets_path.'rich_text.html'),
+                          'int' => file_get_contents($widgets_path.'string.html'),
+                          'double' => file_get_contents($widgets_path.'string.html'),
+                          'decimal' => file_get_contents($widgets_path.'string.html'),
+                          'date' => file_get_contents($widgets_path.'datetime.html'),
+                          'time' => file_get_contents($widgets_path.'datetime.html'),
                           'datetime' => file_get_contents($widgets_path.'datetime.html'),
                           'bool' => file_get_contents($widgets_path.'bool.html'));
-    
+
     // different date formats for the date/time fields
     $date_formats = array('datetime' => '%Y-%m-%d %H:%M:00',
                         'date' => '%Y-%m-%d',
                         'time' => '%H:%M:00');
-    
+
     // rich text editor boilerplate code
     $rte  = "\$editor =& JFactory::getEditor();\n";
     $rte .= "\$params = array('smilies'=> '0', 'html' => '1', 'style'  => '1', 'layer'  => '0', 'table'  => '1', 'clear_entities'=>'0');";
-    
+
     // behavior required for showing the calendar
     $cal = "JHTML::_('behavior.calendar');\n";
-    
+
     foreach ($models as $model => $attrs) {
         if($attrs['sql_only'] || !in_array($model, array_keys($views))) continue;
 
         $has_details = in_array('details', array_keys($views[$model]));
         $has_new = in_array('new', array_keys($views[$model]));
         $has_list = in_array('list', array_keys($views[$model]));
-        
+
         $config['rte'] = $config['cal'] = '';
         $config['viewClass'] = ucfirst($model);
         $config['model'] = $config['view'] = $config['controller'] = $model;
         $config['entity'] = title($model);
         $table_name = $table_prefix.$model;
-        
+
         $config['fields_headers'] = $config['fields_values'] = $config['widgets'] = $config['details'] = '';
         foreach ($attrs as $key => $value) {
             if($has_list && in_array($key, $views[$model]['list'])) {
@@ -586,7 +586,7 @@ function prepare_views_for_frontend($config, $models, $views)
                 $config['query'] = "SELECT `id`, `id` AS `title` FROM `$table_name`";
             }
         }
-        
+
         $files[$model] = array('view.html.php' => render($class_template, $config));
         if($has_list) {
             $files[$model]['tmpl'.DS.'list.php'] = render($list_template, $config);
@@ -601,7 +601,7 @@ function prepare_views_for_frontend($config, $models, $views)
             $files[$model]['tmpl'.DS.'new.xml'] = render($new_params, $config);
         }
     }
-    
+
     return $files;
 }
 
@@ -617,7 +617,7 @@ function prepare_default_view($config, $views, $for='admin')
     $view_path = 'tmpl'.DS.$for.DS.'default_view'.DS;
     $class_template = file_get_contents($view_path.'view.html.php');
     $default_template = file_get_contents($view_path.'tmpl'.DS.'default.php');
-    
+
     if($for == 'site') {
         $option = $config['component'];
         $links_to_views = '<ul>';
@@ -631,6 +631,6 @@ function prepare_default_view($config, $views, $for='admin')
         $config['links_to_views'] = $links_to_views;
     }
 
-    return array('view.html.php' => render($class_template, $config), 
+    return array('view.html.php' => render($class_template, $config),
                  'tmpl'.DS.'default.php' => render($default_template, $config));
 }
