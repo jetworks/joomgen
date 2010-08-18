@@ -69,8 +69,9 @@ class {{identifier}}Model{{model}} extends JModel
     {
         $cid = JRequest::getVar('cid');
         $id = (int)$cid[0];
-        $this->_db->setQuery("SELECT * FROM `{{table_name}}` WHERE `id` = $id");
-        return $this->_db->loadObject();
+        $row =& $this->getTable('{{model}}', 'JTable');
+        $row->load($id);
+        return $row;
     }
 
     /**
